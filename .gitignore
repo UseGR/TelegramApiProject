@@ -3,3 +3,5 @@
 /common-rabbitmq/target/
 /dispatcher/target/
 /logs/
+/node/src/main/resources/application.properties
+/node/target/

@@ -1,21 +1,23 @@
 package ru.galeev.service.impl;
 
 import lombok.Data;
-import lombok.extern.log4j.Log4j;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.objects.Update;
-import ru.galeev.service.UpdateProducer;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import ru.galeev.controller.UpdateController;
+import ru.galeev.service.AnswerConsumer;
+
+import static ru.galeev.model.RabbitQueue.ANSWER_MESSAGE;
 
 @Service
-@Log4j
 @Data
-public class AnswerConsumerImpl implements UpdateProducer {
-    private final RabbitTemplate rabbitTemplate;
+public class AnswerConsumerImpl implements AnswerConsumer {
+    private final UpdateController updateController;
+
 
     @Override
-    public void produce(String rabbitQueue, Update update) {
-        log.debug(update.getMessage().getText());
-        rabbitTemplate.convertAndSend(rabbitQueue, update);
+    @RabbitListener(queues = ANSWER_MESSAGE)
+    public void consume(SendMessage sendMessage) {
+        updateController.setView(sendMessage);
     }
 }
