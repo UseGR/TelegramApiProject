@@ -9,3 +9,4 @@
 /common-jpa/target/
 /rest-service/target/
 /rest-service/src/main/resources/application.properties
+/common-utils/target/

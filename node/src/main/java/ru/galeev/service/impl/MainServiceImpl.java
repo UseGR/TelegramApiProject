@@ -16,6 +16,7 @@ import ru.galeev.exceptions.UploadFileException;
 import ru.galeev.service.FileService;
 import ru.galeev.service.MainService;
 import ru.galeev.service.ProducerService;
+import ru.galeev.service.enums.LinkType;
 import ru.galeev.service.enums.ServiceCommand;
 
 import static ru.galeev.entity.enums.UserState.BASIC_STATE;
@@ -65,8 +66,9 @@ public class MainServiceImpl implements MainService {
 
         try {
             AppDocument doc = fileService.processDoc(update.getMessage());
+            String link = fileService.generateLink(doc.getId(), LinkType.GET_DOC);
             var answer = "Документ успешно загружен! "
-                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+                    + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
             log.error(ex);
@@ -86,8 +88,9 @@ public class MainServiceImpl implements MainService {
 
         try {
             AppPhoto photo = fileService.processPhoto(update.getMessage());
+            String link = fileService.generateLink(photo.getId(), LinkType.GET_PHOTO);
             var answer = "Фото успешно загружено! "
-                    + "Ссылка для скачивания: http://test.ru/get-photo/777";
+                    + "Ссылка для скачивания: " + link;
             sendAnswer(answer, chatId);
         } catch (UploadFileException ex) {
             log.error(ex);

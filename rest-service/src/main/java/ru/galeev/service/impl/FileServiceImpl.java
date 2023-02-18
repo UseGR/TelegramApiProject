@@ -11,6 +11,7 @@ import ru.galeev.entity.AppDocument;
 import ru.galeev.entity.AppPhoto;
 import ru.galeev.entity.BinaryContent;
 import ru.galeev.service.FileService;
+import ru.galeev.utils.CryptoTool;
 
 
 import java.io.File;
@@ -22,16 +23,23 @@ import java.io.IOException;
 public class FileServiceImpl implements FileService {
     private final AppDocumentDAO appDocumentDAO;
     private final AppPhotoDAO appPhotoDAO;
+    private final CryptoTool cryptoTool;
 
     @Override
-    public AppDocument getDocument(String docId) {
-        var id = Long.parseLong(docId);
+    public AppDocument getDocument(String hash) {
+        var id = cryptoTool.idOf(hash);
+        if (id == null) {
+            return null;
+        }
         return appDocumentDAO.findById(id).orElse(null);
     }
 
     @Override
-    public AppPhoto getPhoto(String photoId) {
-        var id = Long.parseLong(photoId);
+    public AppPhoto getPhoto(String hash) {
+        var id = cryptoTool.idOf(hash);
+        if (id == null) {
+            return null;
+        }
         return appPhotoDAO.findById(id).orElse(null);
     }
 
