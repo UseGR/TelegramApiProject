@@ -4,11 +4,9 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.galeev.service.ConsumerService;
 import ru.galeev.service.MainService;
-import ru.galeev.service.ProducerService;
 
 import static ru.galeev.model.RabbitQueue.*;
 
@@ -29,11 +27,13 @@ public class ConsumerServiceImpl implements ConsumerService {
     @RabbitListener(queues = DOC_MESSAGE_UPDATE)
     public void consumeDocMessageUpdates(Update update) {
         log.debug("NODE: Doc message is received");
+        mainService.processDocMessage(update);
     }
 
     @Override
     @RabbitListener(queues = PHOTO_MESSAGE_UPDATE)
     public void consumePhotoMessageUpdates(Update update) {
         log.debug("NODE: Photo message is received");
+        mainService.processPhotoMessage(update);
     }
 }
