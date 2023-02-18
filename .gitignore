@@ -5,3 +5,4 @@
 /logs/
 /node/src/main/resources/application.properties
 /node/target/
+/node/logs/
