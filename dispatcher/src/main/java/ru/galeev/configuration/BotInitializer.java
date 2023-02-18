@@ -9,19 +9,19 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.galeev.controller.TelegramBot;
 
-@Component
+//@Component
 @Data
 public class BotInitializer {
-    private final TelegramBot bot;
-
-    @EventListener({ContextRefreshedEvent.class})
-    public void init() {
-        try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(bot);
-        } catch (TelegramApiException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private final TelegramBot bot;
+//
+//    @EventListener({ContextRefreshedEvent.class})
+//    public void init() {
+//        try {
+//            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+//            telegramBotsApi.registerBot(bot);
+//        } catch (TelegramApiException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 
 }
