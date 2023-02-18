@@ -8,14 +8,18 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.User;
 import ru.galeev.dao.AppUserDAO;
 import ru.galeev.dao.RawDataDAO;
+import ru.galeev.entity.AppDocument;
 import ru.galeev.entity.AppUser;
 import ru.galeev.entity.RawData;
+import ru.galeev.exceptions.UploadFileException;
+import ru.galeev.service.FileService;
 import ru.galeev.service.MainService;
 import ru.galeev.service.ProducerService;
+import ru.galeev.service.enums.ServiceCommand;
 
 import static ru.galeev.entity.enums.UserState.BASIC_STATE;
 import static ru.galeev.entity.enums.UserState.WAIT_FOR_EMAIL_STATE;
-import static ru.galeev.service.enums.ServiceCommands.*;
+import static ru.galeev.service.enums.ServiceCommand.*;
 
 @Service
 @Data
@@ -24,6 +28,7 @@ public class MainServiceImpl implements MainService {
     private final RawDataDAO rawDataDAO;
     private final ProducerService producerService;
     private final AppUserDAO appUserDAO;
+    private final FileService fileService;
 
     @Override
     public void processTextMessage(Update update) {
@@ -34,7 +39,8 @@ public class MainServiceImpl implements MainService {
         var text = update.getMessage().getText();
         var output = "";
 
-        if (CANCEL.equals(text)) {
+        var serviceCommand = ServiceCommand.fromValue(text);
+        if (CANCEL.equals(serviceCommand)) {
             output = cancelProcess(appUser);
         } else if (BASIC_STATE.equals(userState)) {
             output = processServiceCommand(appUser, text);
@@ -43,7 +49,6 @@ public class MainServiceImpl implements MainService {
             log.error("Unknown user state: " + userState);
             output = "Неизвестная ошибка! Введите /cancel и попробуйте снова!";
         }
-
         var chatId = update.getMessage().getChatId();
         sendAnswer(output, chatId);
     }
@@ -57,8 +62,16 @@ public class MainServiceImpl implements MainService {
             return;
         }
 
-        var answer = "Документ успешно загружен! Ссылка для скачивания: http://test.ru/get-doc/777";
-        sendAnswer(answer, chatId);
+        try {
+            AppDocument doc = fileService.processDoc(update.getMessage());
+            var answer = "Документ успешно загружен! "
+                    + "Ссылка для скачивания: http://test.ru/get-doc/777";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex);
+            String error = "К сожалению, загрузка файла не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     @Override
@@ -96,11 +109,12 @@ public class MainServiceImpl implements MainService {
     }
 
     private String processServiceCommand(AppUser appUser, String cmd) {
-        if (REGISTRATION.equals(cmd)) {
+        var serviceCommand = ServiceCommand.fromValue(cmd);
+        if (REGISTRATION.equals(serviceCommand)) {
             return "Временно недоступно.";
-        } else if (HELP.equals(cmd)) {
+        } else if (HELP.equals(serviceCommand)) {
             return help();
-        } else if (START.equals(cmd)) {
+        } else if (START.equals(serviceCommand)) {
             return "Приветствую! Чтобы посмотреть список доступных команд введите /help";
         } else {
             return "Неизвестная команда! Чтобы посмотреть список доступных команд введите /help";
