@@ -7,3 +7,5 @@
 /node/target/
 /node/logs/
 /common-jpa/target/
+/rest-service/target/
+/rest-service/src/main/resources/application.properties
