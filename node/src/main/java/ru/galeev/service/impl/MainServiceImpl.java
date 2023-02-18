@@ -9,6 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.User;
 import ru.galeev.dao.AppUserDAO;
 import ru.galeev.dao.RawDataDAO;
 import ru.galeev.entity.AppDocument;
+import ru.galeev.entity.AppPhoto;
 import ru.galeev.entity.AppUser;
 import ru.galeev.entity.RawData;
 import ru.galeev.exceptions.UploadFileException;
@@ -83,8 +84,16 @@ public class MainServiceImpl implements MainService {
             return;
         }
 
-        var answer = "Фото успешно загружено! Ссылка для скачивания: http://test.ru/get-photo/777";
-        sendAnswer(answer, chatId);
+        try {
+            AppPhoto photo = fileService.processPhoto(update.getMessage());
+            var answer = "Фото успешно загружено! "
+                    + "Ссылка для скачивания: http://test.ru/get-photo/777";
+            sendAnswer(answer, chatId);
+        } catch (UploadFileException ex) {
+            log.error(ex);
+            String error = "К сожалению, загрузка фото не удалась. Повторите попытку позже.";
+            sendAnswer(error, chatId);
+        }
     }
 
     private boolean isNotAllowToSendContent(Long chatId, AppUser appUser) {
