@@ -6,3 +6,4 @@
 /node/src/main/resources/application.properties
 /node/target/
 /node/logs/
+/common-jpa/target/
