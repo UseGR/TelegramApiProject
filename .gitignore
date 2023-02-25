@@ -16,3 +16,4 @@
 /db-migration/src/main/resources/application.properties
 /startPostgresContainer.sh
 /startRabbitMqContainer.sh
+/getStatic.sh

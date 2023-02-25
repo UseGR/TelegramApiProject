@@ -2,6 +2,9 @@ server.port=
 
 bot.name=
 bot.token=
+bot.uri=
+
+server.ssl.enabled=false
 
 spring.rabbitmq.host=
 spring.rabbitmq.port=
