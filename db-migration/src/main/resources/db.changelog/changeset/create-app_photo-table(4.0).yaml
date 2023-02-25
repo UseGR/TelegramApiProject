@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4
+      author: galeev
+      changes:
+        - createTable:
+            tableName: app_photo
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: file_size
+                  type: integer
+              - column:
+                  name: telegram_file_id
+                  type: varchar(255)
+              - column:
+                  name: binary_content_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: fk_binary_content_pho
+                    references: binary_content(id)

@@ -12,3 +12,5 @@
 /common-utils/target/
 /mail-service/target/
 /mail-service/src/main/resources/application.properties
+/db-migration/target/
+/db-migration/src/main/resources/application.properties

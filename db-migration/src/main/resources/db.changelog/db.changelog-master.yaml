@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - include:
+      file: db.changelog/changeset/create-row_data-table(1.0).yaml
+  - include:
+      file: db.changelog/changeset/create-binary_content-table(2.0).yaml
+  - include:
+      file: db.changelog/changeset/create-app_user-table(3.0).yaml
+  - include:
+      file: db.changelog/changeset/create-app_photo-table(4.0).yaml
+  - include:
+      file: db.changelog/changeset/create-app_document-table(5.0).yaml
