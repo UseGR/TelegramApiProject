@@ -37,3 +37,13 @@ databaseChangeLog:
               - column:
                   name: username
                   type: varchar(255)
+        - createIndex:
+            clustered: true
+            columns:
+              - column:
+                  descending: true
+                  name: email
+            indexName: idx_email
+            schemaName: public
+            tableName: app_user
+            unique: false

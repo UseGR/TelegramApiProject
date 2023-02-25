@@ -16,7 +16,7 @@ public class ActivationController {
         this.userActivationService = userActivationService;
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/activation")
+    @RequestMapping(method = RequestMethod.GET, value = "/activation/activation")
     public ResponseEntity<?> activation(@RequestParam("id") String id) {
         var res = userActivationService.activation(id);
         if (res) {
